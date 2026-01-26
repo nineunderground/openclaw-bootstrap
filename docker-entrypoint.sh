@@ -79,6 +79,11 @@ if [ ! -f "$CONFIG_FILE" ] || [ -n "$CLAWDBOT_REGENERATE_CONFIG" ]; then
 EOF
 
     echo "Config generated at $CONFIG_FILE"
+    echo ""
+    echo "=== CONFIG CONTENT ==="
+    cat "$CONFIG_FILE"
+    echo ""
+    echo "=== END CONFIG ==="
     
     # Show token if it was auto-generated
     if [ "$TOKEN_GENERATED" = "1" ]; then
