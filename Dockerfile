@@ -24,13 +24,13 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
 RUN npm install -g moltbot@latest
 
 # Create directories
-RUN mkdir -p /root/.moltbot /root/molt/memory
+RUN mkdir -p /root/.clawdbot /root/clawd/memory
 
 # Set workspace
-WORKDIR /root/molt
+WORKDIR /root/clawd
 
 # Default port (can be overridden)
-ENV MOLTBOT_GATEWAY_PORT=4001
+ENV CLAWDBOT_GATEWAY_PORT=4001
 
 # Copy entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -41,7 +41,7 @@ EXPOSE 4001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:${MOLTBOT_GATEWAY_PORT}/health || exit 1
+    CMD curl -f http://localhost:${CLAWDBOT_GATEWAY_PORT}/health || exit 1
 
 # Run entrypoint
 ENTRYPOINT ["docker-entrypoint.sh"]

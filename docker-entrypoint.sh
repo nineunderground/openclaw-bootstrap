@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-CONFIG_DIR="/root/.moltbot"
-CONFIG_FILE="$CONFIG_DIR/moltbot.json"
-WORKSPACE="/root/molt"
+CONFIG_DIR="/root/.clawdbot"
+CONFIG_FILE="$CONFIG_DIR/clawdbot.json"
+WORKSPACE="/root/clawd"
 
 # Ensure directories exist
 mkdir -p "$CONFIG_DIR" "$WORKSPACE/memory"
@@ -16,15 +16,15 @@ else
 fi
 
 # Generate config if it doesn't exist or if env vars are set
-if [ ! -f "$CONFIG_FILE" ] || [ -n "$MOLTBOT_REGENERATE_CONFIG" ]; then
+if [ ! -f "$CONFIG_FILE" ] || [ -n "$CLAWDBOT_REGENERATE_CONFIG" ]; then
     echo "Generating Moltbot configuration..."
     
     # Use provided token or generate one
-    if [ -z "$MOLTBOT_GATEWAY_TOKEN" ]; then
+    if [ -z "$CLAWDBOT_GATEWAY_TOKEN" ]; then
         GATEWAY_TOKEN=$(openssl rand -hex 32)
         TOKEN_GENERATED=1
     else
-        GATEWAY_TOKEN="$MOLTBOT_GATEWAY_TOKEN"
+        GATEWAY_TOKEN="$CLAWDBOT_GATEWAY_TOKEN"
         TOKEN_GENERATED=0
     fi
     
@@ -44,7 +44,7 @@ if [ ! -f "$CONFIG_FILE" ] || [ -n "$MOLTBOT_REGENERATE_CONFIG" ]; then
     }
   },
   "gateway": {
-    "port": ${MOLTBOT_GATEWAY_PORT:-4001},
+    "port": ${CLAWDBOT_GATEWAY_PORT:-4001},
     "mode": "local",
     "bind": "lan",
     "auth": {
@@ -97,9 +97,9 @@ EOF
 fi
 
 # If a custom config is mounted, use it
-if [ -f "/config/moltbot.json" ]; then
-    echo "Using mounted config from /config/moltbot.json"
-    cp /config/moltbot.json "$CONFIG_FILE"
+if [ -f "/config/clawdbot.json" ]; then
+    echo "Using mounted config from /config/clawdbot.json"
+    cp /config/clawdbot.json "$CONFIG_FILE"
 fi
 
 # Always show config content for debugging
@@ -116,7 +116,7 @@ echo "╔═══════════════════════�
 echo "║         Moltbot Docker Container         ║"
 echo "╚═══════════════════════════════════════════╝"
 echo ""
-echo "  Port:      ${MOLTBOT_GATEWAY_PORT:-4001}"
+echo "  Port:      ${CLAWDBOT_GATEWAY_PORT:-4001}"
 echo "  Workspace: $WORKSPACE"
 echo "  Config:    $CONFIG_FILE"
 echo "  Telegram:  $TELEGRAM_ENABLED"

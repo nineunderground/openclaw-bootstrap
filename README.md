@@ -32,10 +32,10 @@ docker run -d \
   --name moltbot-gateway \
   -p 4001:4001 \
   -e ANTHROPIC_API_KEY="sk-ant-..." \
-  -e MOLTBOT_GATEWAY_PORT=4001 \
+  -e CLAWDBOT_GATEWAY_PORT=4001 \
   -e TELEGRAM_BOT_TOKEN="123456789:ABC..." \
-  -v moltbot-data:/root/molt \
-  -v moltbot-config:/root/.moltbot \
+  -v clawdbot-data:/root/clawd \
+  -v clawdbot-config:/root/.clawdbot \
   --restart unless-stopped \
   moltbot
 ```
@@ -48,9 +48,9 @@ docker run -d \
   --name moltbot-gateway \
   -p 5000:5000 \
   -e ANTHROPIC_API_KEY="sk-ant-..." \
-  -e MOLTBOT_GATEWAY_PORT=5000 \
-  -v moltbot-data:/root/molt \
-  -v moltbot-config:/root/.moltbot \
+  -e CLAWDBOT_GATEWAY_PORT=5000 \
+  -v clawdbot-data:/root/clawd \
+  -v clawdbot-config:/root/.clawdbot \
   moltbot
 ```
 
@@ -59,10 +59,10 @@ docker run -d \
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `ANTHROPIC_API_KEY` | Yes | — | Your Anthropic API key |
-| `MOLTBOT_GATEWAY_PORT` | No | `4001` | Gateway port |
-| `MOLTBOT_GATEWAY_TOKEN` | No | auto-generated | Auth token for secure access |
+| `CLAWDBOT_GATEWAY_PORT` | No | `4001` | Gateway port |
+| `CLAWDBOT_GATEWAY_TOKEN` | No | auto-generated | Auth token for secure access |
 | `TELEGRAM_BOT_TOKEN` | No | — | Telegram bot token from @BotFather |
-| `MOLTBOT_REGENERATE_CONFIG` | No | — | Set to `1` to regenerate config on restart |
+| `CLAWDBOT_REGENERATE_CONFIG` | No | — | Set to `1` to regenerate config on restart |
 
 ### Docker Compose
 
@@ -77,20 +77,20 @@ services:
       - ANTHROPIC_API_KEY=sk-ant-...
       - TELEGRAM_BOT_TOKEN=123456789:ABC...
     volumes:
-      - moltbot-data:/root/molt
-      - moltbot-config:/root/.moltbot
+      - clawdbot-data:/root/clawd
+      - clawdbot-config:/root/.clawdbot
     restart: unless-stopped
 
 volumes:
-  moltbot-data:
-  moltbot-config:
+  clawdbot-data:
+  clawdbot-config:
 ```
 
 ### Persistent Data
 
 The container uses two volumes:
-- `moltbot-data` → `/root/molt` (workspace, memory, files)
-- `moltbot-config` → `/root/.moltbot` (configuration, state)
+- `clawdbot-data` → `/root/clawd` (workspace, memory, files)
+- `clawdbot-config` → `/root/.clawdbot` (configuration, state)
 
 ### View Logs
 
@@ -100,7 +100,7 @@ docker logs -f moltbot-gateway
 
 ### First Run Token
 
-On first run, if you don't provide `MOLTBOT_GATEWAY_TOKEN`, one is auto-generated and printed to the logs:
+On first run, if you don't provide `CLAWDBOT_GATEWAY_TOKEN`, one is auto-generated and printed to the logs:
 
 ```bash
 docker logs moltbot-gateway | grep "GATEWAY TOKEN"
@@ -130,7 +130,7 @@ sudo ./deploy.sh config.json
 
 ```json
 {
-  "workspace": "/root/molt",
+  "workspace": "/root/clawd",
   "gateway": {
     "port": 18181,
     "token": "your-secure-token"
@@ -210,7 +210,7 @@ moltbot pairing approve telegram <CODE>
 
 ## Security
 
-- Always set `MOLTBOT_GATEWAY_TOKEN` before exposing to the internet
+- Always set `CLAWDBOT_GATEWAY_TOKEN` before exposing to the internet
 - Use [moltbot-nginx-proxy-docker](https://github.com/nineunderground/moltbot-nginx-proxy-docker) for HTTPS
 - Keep your API keys and tokens secure
 
