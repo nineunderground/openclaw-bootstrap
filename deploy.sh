@@ -89,8 +89,10 @@ if command -v clawdbot &> /dev/null; then
     warn "Upgrading to latest..."
 fi
 
-npm install -g clawdbot@latest
-log "Moltbot $(clawdbot --version) installed ✓"
+curl -fsSL https://molt.bot/install.sh | bash -s -- --no-onboard --no-prompt
+# Resolve binary name (may be clawdbot or moltbot)
+MOLT_BIN=$(command -v moltbot 2>/dev/null || command -v clawdbot 2>/dev/null || echo "moltbot")
+log "Moltbot $($MOLT_BIN --version) installed ✓"
 
 # Step 3: Create workspace
 echo "─────────────────────────────────────────────"

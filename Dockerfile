@@ -20,8 +20,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Moltbot globally
-RUN npm install -g clawdbot@latest
+# Install Moltbot via official installer (handles package name mapping)
+RUN curl -fsSL https://molt.bot/install.sh | bash -s -- --no-onboard --no-prompt
 
 # Create directories
 RUN mkdir -p /root/.clawdbot /root/clawd/memory
@@ -43,6 +43,10 @@ EXPOSE 4001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:${CLAWDBOT_GATEWAY_PORT}/health || exit 1
 
+# Ensure moltbot alias exists (binary may be clawdbot or moltbot depending on version)
+RUN command -v moltbot >/dev/null 2>&1 || \
+    (command -v clawdbot >/dev/null 2>&1 && ln -sf "$(which clawdbot)" /usr/local/bin/moltbot) || true
+
 # Run entrypoint
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["clawdbot", "gateway"]
+CMD ["moltbot", "gateway"]

@@ -1,12 +1,21 @@
 #!/bin/bash
 set -e
 
-CONFIG_DIR="/root/.clawdbot"
-CONFIG_FILE="$CONFIG_DIR/clawdbot.json"
+# Detect config dir (moltbot may use ~/.moltbot or ~/.clawdbot depending on version)
+if [ -d "/root/.moltbot" ] || command -v moltbot &>/dev/null && moltbot --help 2>&1 | grep -q "moltbot"; then
+    CONFIG_DIR="/root/.moltbot"
+    CONFIG_FILE="$CONFIG_DIR/moltbot.json"
+else
+    CONFIG_DIR="/root/.clawdbot"
+    CONFIG_FILE="$CONFIG_DIR/clawdbot.json"
+fi
 WORKSPACE="/root/clawd"
 
 # Ensure directories exist
 mkdir -p "$CONFIG_DIR" "$WORKSPACE/memory"
+
+# Also ensure alternate config dir exists (some versions check both)
+mkdir -p /root/.clawdbot /root/.moltbot
 
 # Determine if Telegram is enabled
 if [ -n "$TELEGRAM_BOT_TOKEN" ]; then
