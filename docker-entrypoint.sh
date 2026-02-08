@@ -41,6 +41,20 @@ else
     OLLAMA_ENABLED="false"
 fi
 
+# Configure GitHub PAT for git operations if provided
+if [ -n "$GITHUB_PAT" ]; then
+    GITHUB_ENABLED="true"
+    # Configure git credential helper to use the PAT
+    git config --global credential.helper store
+    echo "https://${GITHUB_PAT}@github.com" > ~/.git-credentials
+    chmod 600 ~/.git-credentials
+    # Also set up .netrc for tools that use it
+    echo "machine github.com login oauth password ${GITHUB_PAT}" > ~/.netrc
+    chmod 600 ~/.netrc
+else
+    GITHUB_ENABLED="false"
+fi
+
 # Generate config if it doesn't exist or if env vars are set
 if [ ! -f "$CONFIG_FILE" ] || [ -n "$openclaw_REGENERATE_CONFIG" ]; then
     echo "Generating openclaw configuration..."
@@ -163,6 +177,7 @@ echo "  Workspace: $WORKSPACE"
 echo "  Config:    $CONFIG_FILE"
 echo "  Telegram:  $TELEGRAM_ENABLED"
 echo "  Ollama:    $OLLAMA_ENABLED"
+echo "  GitHub:    $GITHUB_ENABLED"
 echo ""
 
 # Execute the command

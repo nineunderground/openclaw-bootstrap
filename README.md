@@ -29,6 +29,7 @@ docker-compose --profile oauth2 up -d
 | `CLAWDBOT_GATEWAY_TOKEN` | No | auto-generated | Auth token for secure access |
 | `TELEGRAM_BOT_TOKEN` | No | — | Telegram bot token from @BotFather |
 | `OLLAMA_BASE_URL` | No | — | Ollama API URL (e.g., `http://192.168.1.100:11434/v1`) |
+| `GITHUB_PAT` | No | — | GitHub Personal Access Token for git push/clone |
 | `CLAWDBOT_REGENERATE_CONFIG` | No | — | Set to `1` to regenerate config on restart |
 
 ### Persistent Data
